@@ -8,7 +8,7 @@ A backend-only ASP.NET Core Web API demonstrating JWT authentication, OAuth 2.0 
 
 ### ASP.NET Core Identity
 ASP.NET Core Identity is a membership system that handles user authentication, authorization, and management. In this project, Identity is used to:
-- Store users and roles in an in-memory SQLite database
+- Store users and roles in a SQL Server database
 - Manage password hashing and verification
 - Handle role-based authorization (`Admin`, `Manager`, `Employee`)
 - Seed initial test users with predefined credentials
@@ -99,6 +99,7 @@ SecureAuth/
 
 ### Prerequisites
 - .NET 10 SDK or later
+- SQL Server (LocalDB, Express, or full instance)
 - Any REST client (Swagger UI, Postman, curl)
 
 ### Run the API
@@ -110,6 +111,9 @@ cd SecureAuth
 
 # Restore dependencies
 dotnet restore
+
+# Configure database connection (edit appsettings.json)
+# Default: Server=localhost;Database=SecureAuthDb;Trusted_Connection=True;TrustServerCertificate=True;
 
 # Run the API
 dotnet run --project SecureAuth.API
@@ -230,6 +234,6 @@ JWT is stateless—the server doesn't store session data. All necessary informat
 4. **Add rate limiting** - Prevent brute force attacks
 5. **Implement token refresh** - Short-lived access tokens with refresh tokens
 6. **Add logging & monitoring** - Track authentication events
-7. **Use a real database** - Replace SQLite in-memory with PostgreSQL/SQL Server
+7. **Use a secure database connection** - Protect connection strings and use integrated security
 8. **Enable account lockout** - Configure lockout after failed attempts
 9. **Add MFA** - Multi-factor authentication for sensitive roles

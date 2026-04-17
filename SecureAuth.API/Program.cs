@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +16,8 @@ public class Program
 
         builder.Services.AddControllers();
 
-        builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlite("Data Source=:memory:"));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
@@ -89,14 +88,13 @@ public class Program
 
         var app = builder.Build();
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            context.Database.OpenConnection();
-            context.Database.EnsureCreated();
-            
-            await DataSeeder.SeedAsync(scope.ServiceProvider);
-        }
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.EnsureCreated();
+
+    await DataSeeder.SeedAsync(scope.ServiceProvider);
+}
 
         if (app.Environment.IsDevelopment())
         {
